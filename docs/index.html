@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>F5-TTS + SmoothCache</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <style>
+        body {
+            background-color: #fff;
+            color: #333;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #555;
+            margin: 0.5rem 0 0;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 2rem;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        pre, code {
+            background: #f5f5f5;
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 0.75rem 0.5rem;
+            vertical-align: center;
+        }
+
+        thead tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        tbody tr:not(:last-child) {
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            font-weight: 600;
+            color: #444;
+        }
+
+        td {
+            color: #333;
+        }
+
+        audio {
+            width: 200px;
+            border-radius: 6px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #aaa;
+            padding: 2rem 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .audio-row {
+            display: flex;
+            align-items: center;  /* This vertically centers children */
+            gap: 0.5rem;          /* Space between text and audio */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>F5-TTS + SmoothCache</h1>
+    <h2>temp</h2>
+</header>
+
+<main>
+
+    <section>
+        <h3>Calibration Approach</h3>
+        <p>
+            <div class="audio-row">
+                <span class="audio-label"><b>Prompt:</b></span>
+                <audio controls src="seedtts_ref_1.wav"></audio>
+            </div>
+            <b>Text to Generate:</b> I don't really care what you call me. I've been a silent spectator, watching species evolve, empires rise and fall. But always remember, I am mighty and enduring.
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Approach</th>
+                    <th>Cache Schedule</th>
+                    <th>Generated Audio</th>
+                    <th>Inference Time (s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>No Cache</td>
+                    <td><img src="no_cache.png" alt="No Cache"></td>
+                    <td><audio controls src="seedtts_gen_1.wav"></audio></td>
+                    <td>6.04</td>
+                </tr>
+                <tr>
+                    <td>Original Cache Schedule</td>
+                    <td><img src="default.png" alt="Original Cache Schedule"></td>
+                    <td><audio controls src="seedtts_gen_1_cache.wav"></audio></td>
+                    <td>4.45</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </section>
+
+</main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const audios = document.querySelectorAll("audio");
+
+        audios.forEach(audio => {
+            audio.setAttribute("controlslist", "nodownload noplaybackrate noremoteplayback");
+            audio.setAttribute("disablepictureinpicture", "");
+            audio.style.width = "200px";  // Optional: consistent sizing
+        });
+    });
+</script>
+
+</body>
+</html>
