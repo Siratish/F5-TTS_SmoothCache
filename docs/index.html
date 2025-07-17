@@ -11,7 +11,7 @@
     <!-- Styles -->
     <style>
         body {
-            background-color: #fff;
+            background-color: #fafafa;
             color: #333;
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -20,6 +20,7 @@
         }
 
         header {
+            background-color: #fff;
             text-align: center;
             padding: 2rem 1rem;
             border-bottom: 1px solid #eee;
@@ -39,19 +40,21 @@
         }
 
         main {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
 
         section {
-            margin-bottom: 3rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 2rem;
+            border: 1px solid #eee;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            background-color: #fff;  /* Optional: light background */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);  /* Optional: soft shadow */
         }
 
         h3 {
-            font-size: 1.4rem;
+            font-size: 1.8rem;
             font-weight: 600;
             color: #333;
             margin-top: 0;
@@ -89,7 +92,7 @@
         }
 
         thead tr {
-            border-bottom: 1px solid #ddd;
+            border-bottom: 2px solid #000;
         }
 
         tbody tr:not(:last-child) {
@@ -98,7 +101,7 @@
 
         th {
             font-weight: 600;
-            color: #444;
+            color: #000;
         }
 
         td {
@@ -148,7 +151,7 @@
             <thead>
                 <tr>
                     <th>Approach</th>
-                    <th>Cache Schedule</th>
+                    <th>Cache Schedule<br>(🟧 = Compute Attn Layer, 🟩 = Compute FFN Layer, ⬜ = Cached Layer)</th>
                     <th>Generated Audio</th>
                     <th>Inference Time (s)</th>
                 </tr>
@@ -158,14 +161,186 @@
                     <td>No Cache</td>
                     <td><img src="no_cache.png" alt="No Cache"></td>
                     <td><audio controls src="seedtts_gen_1.wav"></audio></td>
-                    <td>6.04</td>
+                    <td>6.71</td>
                 </tr>
                 <tr>
                     <td>Original Cache Schedule</td>
                     <td><img src="default.png" alt="Original Cache Schedule"></td>
-                    <td><audio controls src="seedtts_gen_1_cache.wav"></audio></td>
-                    <td>4.45</td>
+                    <td><audio controls src="infer_cache_10.wav"></audio></td>
+                    <td>5.09</td>
                 </tr>
+                <tr>
+                    <td>Cache Attn Only</td>
+                    <td><img src="attn_only.png" alt="Cache Attn Only"></td>
+                    <td><audio controls src="infer_cache_attn_only.wav"></audio></td>
+                    <td>5.64</td>
+                </tr>
+                <tr>
+                    <td>Same Schedule (Attn Base)</td>
+                    <td><img src="attn_base.png" alt="Same Schedule (Attn Base)"></td>
+                    <td><audio controls src="infer_cache_equal_attn.wav"></audio></td>
+                    <td>5.15</td>
+                </tr>
+                <tr>
+                    <td>Cache FFN Only</td>
+                    <td><img src="ff_only.png" alt="Cache FFN Only"></td>
+                    <td><audio controls src="infer_cache_ff_only.wav"></audio></td>
+                    <td>6.24</td>
+                </tr>
+                <tr>
+                    <td>Same Schedule (FFN Base)</td>
+                    <td><img src="ff_base.png" alt="Same Schedule (FFN Base)"></td>
+                    <td><audio controls src="infer_cache_equal_ff.wav"></audio></td>
+                    <td>4.64</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h3>Caching Thresholds</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Prompt</th>
+                    <th>Text</th>
+                    <th>32 NFE (No Cache)</th>
+                    <th>32 NFE (α = 0.15)</th>
+                    <th>32 NFE (α = 0.25)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><audio controls src="seedtts_ref_1.wav"></audio></td>
+                    <td>I don't really care what you call me. I've been a silent spectator, watching species evolve, empires rise and fall. But always remember, I am mighty and enduring.</td>
+                    <td><audio controls src="seedtts_gen_1.wav"></audio><br>Inference Time = 6.71 s</td>
+                    <td><audio controls src="seedtts_gen_1_cache_15.wav"></audio><br>Inference Time = 5.22 s</td>
+                    <td><audio controls src="seedtts_gen_1_cache_25.wav"></audio><br>Inference Time = 4.14 s</td>
+                </tr>
+                <tr>
+                    <td><audio controls src="seedtts_ref_2.wav"></audio></td>
+                    <td>Perhaps they are driven by the delicious blend of flavors, or it could be the appealing visual presentation. At the end of the day, our choices in food reflect our personal preferences and sometimes, even our lifestyle or belief system.</td>
+                    <td><audio controls src="seedtts_gen_2.wav"></audio><br>Inference Time = 9.85 s</td>
+                    <td><audio controls src="seedtts_gen_2_cache_15.wav"></audio><br>Inference Time = 8.73 s</td>
+                    <td><audio controls src="seedtts_gen_2_cache_25.wav"></audio><br>Inference Time = 7.58 s</td>
+                </tr>
+                <tr>
+                    <td><audio controls src="seedtts_ref_3.wav"></audio></td>
+                    <td>Your safety and the pack's reputation are at stake. Your bravery is admirable, but sometimes bravery is knowing when to retreat. Please, consider returning with me. We can work out a plan, but only if you're willing to listen.</td>
+                    <td><audio controls src="seedtts_gen_3.wav"></audio><br>Inference Time = 10.41 s</td>
+                    <td><audio controls src="seedtts_gen_3_cache_15.wav"></audio><br>Inference Time = 9.26 s</td>
+                    <td><audio controls src="seedtts_gen_3_cache_25.wav"></audio><br>Inference Time = 7.62 s</td>
+                </tr>
+
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Prompt</th>
+                    <th>Text</th>
+                    <th>16 NFE (No Cache)</th>
+                    <th>16 NFE (α = 0.30)</th>
+                    <th>16 NFE (α = 0.50)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><audio controls src="seedtts_ref_1.wav"></audio></td>
+                    <td>I don't really care what you call me. I've been a silent spectator, watching species evolve, empires rise and fall. But always remember, I am mighty and enduring.</td>
+                    <td><audio controls src="seedtts_gen_1_half.wav"></audio><br>Inference Time = 3.41 s</td>
+                    <td><audio controls src="seedtts_gen_1_cache_30.wav"></audio><br>Inference Time = 2.65 s</td>
+                    <td><audio controls src="seedtts_gen_1_cache_50.wav"></audio><br>Inference Time = 1.92 s</td>
+                </tr>
+                <tr>
+                    <td><audio controls src="seedtts_ref_2.wav"></audio></td>
+                    <td>Perhaps they are driven by the delicious blend of flavors, or it could be the appealing visual presentation. At the end of the day, our choices in food reflect our personal preferences and sometimes, even our lifestyle or belief system.</td>
+                    <td><audio controls src="seedtts_gen_2_half.wav"></audio><br>Inference Time = 5.22 s</td>
+                    <td><audio controls src="seedtts_gen_2_cache_30.wav"></audio><br>Inference Time = 4.54 s</td>
+                    <td><audio controls src="seedtts_gen_2_cache_50.wav"></audio><br>Inference Time = 3.64 s</td>
+                </tr>
+                <tr>
+                    <td><audio controls src="seedtts_ref_3.wav"></audio></td>
+                    <td>Your safety and the pack's reputation are at stake. Your bravery is admirable, but sometimes bravery is knowing when to retreat. Please, consider returning with me. We can work out a plan, but only if you're willing to listen.</td>
+                    <td><audio controls src="seedtts_gen_3_half.wav"></audio><br>Inference Time = 5.15 s</td>
+                    <td><audio controls src="seedtts_gen_3_cache_30.wav"></audio><br>Inference Time = 4.51 s</td>
+                    <td><audio controls src="seedtts_gen_3_cache_50.wav"></audio><br>Inference Time = 3.64 s</td>
+                </tr>
+
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h3>Caching Steps</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Prompt</th>
+                    <th>Text</th>
+                    <th>32 NFE (α = 0.15)</th>
+                    <th>24 NFE (No Cache)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><audio controls src="test_ref_1.wav"></audio></td>
+                    <td>The album received many good reviews and entered the charts at high positions.</td>
+                    <td><audio controls src="test_gen_1_cache.wav"></audio><br>Inference Time = 1.98 s</td>
+                    <td><audio controls src="test_gen_1_no_cache.wav"></audio><br>Inference Time = 1.88 s</td>
+                </tr>
+                <tr>
+                    <td><audio controls src="test_ref_2.wav"></audio></td>
+                    <td>The area was swirling in dust so intense that it hid the moon from view.</td>
+                    <td><audio controls src="test_gen_2_cache.wav"></audio><br>Inference Time = 1.62 s</td>
+                    <td><audio controls src="test_gen_2_no_cache.wav"></audio><br>Inference Time = 1.57 s</td>
+                </tr>
+                <tr>
+                    <td><audio controls src="test_ref_3.wav"></audio></td>
+                    <td>Real schools, secondary schools giving a general practical education.</td>
+                    <td><audio controls src="test_gen_3_cache.wav"></audio><br>Inference Time = 1.80 s</td>
+                    <td><audio controls src="test_gen_3_no_cache.wav"></audio><br>Inference Time = 1.62 s</td>
+                </tr>
+
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Prompt</th>
+                    <th>Text</th>
+                    <th>16 NFE (α = 0.30)</th>
+                    <th>12 NFE (No Cache)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><audio controls src="test_ref_4.wav"></audio></td>
+                    <td>He enters the hotel room but finds that everyone already escaped.</td>
+                    <td><audio controls src="test_gen_4_cache.wav"></audio><br>Inference Time = 1.05 s</td>
+                    <td><audio controls src="test_gen_4_no_cache.wav"></audio><br>Inference Time = 0.98 s</td>
+                </tr>
+                <tr>
+                    <td><audio controls src="test_ref_5.wav"></audio></td>
+                    <td>He did find it, soon after dawn, and not far from the sand pits.</td>
+                    <td><audio controls src="test_gen_5_cache.wav"></audio><br>Inference Time = 0.92 s</td>
+                    <td><audio controls src="test_gen_5_no_cache.wav"></audio><br>Inference Time = 0.84 s</td>
+                </tr>
+                <tr>
+                    <td><audio controls src="test_ref_6.wav"></audio></td>
+                    <td>The beam was bent down, perpendicular to the magnetic field.</td>
+                    <td><audio controls src="test_gen_6_cache.wav"></audio><br>Inference Time = 1.08 s</td>
+                    <td><audio controls src="test_gen_6_no_cache.wav"></audio><br>Inference Time = 1.04 s</td>
+                </tr>
+
                 <!-- Add more rows as needed -->
             </tbody>
         </table>
