@@ -27,7 +27,7 @@
         }
 
         h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 600;
             margin: 0;
         }
@@ -131,14 +131,15 @@
 <body>
 
 <header>
-    <h1>F5-TTS + SmoothCache</h1>
-    <h2>temp</h2>
+    <h1>Accelerating Diffusion Transformer-Based Text-to-Speech with Transformer Layer Caching<br>(F5-TTS + SmoothCache)</h1>
+    <h2><b><u><a href="https://huggingface.co/spaces/Siratish/F5-TTS_SmoothCache" target="_blank" rel="noopener noreferrer">Demo</a></u>&nbsp;&nbsp;<u><a href="paper.pdf" target="_blank" rel="noopener noreferrer">Paper</a></u></b></h2>
+    <b>This page is for project demonstration purposes only.</b>
 </header>
 
 <main>
 
     <section>
-        <h3>Calibration Approach</h3>
+        <h3>Caching Strategies</h3>
         <p>
             <div class="audio-row">
                 <span class="audio-label"><b>Prompt:</b></span>
@@ -176,7 +177,7 @@
                     <td>5.64</td>
                 </tr>
                 <tr>
-                    <td>Same Schedule (Attn Base)</td>
+                    <td>Unified Schedule (Attn Base)</td>
                     <td><img src="attn_base.png" alt="Same Schedule (Attn Base)"></td>
                     <td><audio controls src="infer_cache_equal_attn.wav"></audio></td>
                     <td>5.15</td>
@@ -188,7 +189,7 @@
                     <td>6.24</td>
                 </tr>
                 <tr>
-                    <td>Same Schedule (FFN Base)</td>
+                    <td>Unified Schedule (FFN Base)</td>
                     <td><img src="ff_base.png" alt="Same Schedule (FFN Base)"></td>
                     <td><audio controls src="infer_cache_equal_ff.wav"></audio></td>
                     <td>4.64</td>
@@ -200,6 +201,7 @@
 
     <section>
         <h3>Caching Thresholds</h3>
+        <p>Prompt and text from the demo page of <a href="https://bytedancespeech.github.io/seedtts_tech_report/#full-diffusion-samples" target="_blank" rel="noopener noreferrer">Seed-TTS</a>.</p>
 
         <table>
             <thead>
@@ -277,8 +279,8 @@
     </section>
 
     <section>
-        <h3>Caching Steps</h3>
-
+        <h3>Ablation of Caching Steps</h3>
+        <p>Prompt and text chosen for the user study.</p>
         <table>
             <thead>
                 <tr>
